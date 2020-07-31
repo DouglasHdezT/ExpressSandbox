@@ -30,6 +30,36 @@ controller.statusTest = (req, res) => {
 			msg:"Chale, te faltó el name!"
 		})
 	}
- }
+}
+ 
+controller.getMethod = (req, res) => { 
+	res.status(200).json({
+		msg: "Metodo GET"
+	})
+}
+
+controller.postMethod = (req, res) => { 
+	res.status(200).json({
+		msg: "Metodo POST"
+	})
+}
+
+controller.putMethod = (req, res) => { 
+	res.status(200).json({
+		msg: "Metodo PUT"
+	})
+}
+
+controller.patchMethod = (req, res) => { 
+	res.status(200).json({
+		msg: "Metodo PATCH"
+	})
+}
+
+controller.deleteMethod = (req, res) => { 
+	res.status(200).json({
+		msg: "Metodo DELETE"
+	})
+}
 
 module.exports = controller;
