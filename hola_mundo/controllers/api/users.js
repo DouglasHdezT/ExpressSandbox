@@ -57,6 +57,8 @@ controller.signUp = (req, res) => {
 }
 
 controller.getUserByID = (req, res) => {
+	console.log(req.params);
+
 	const { id } = req.params;
 	const idParsed = parseInt(id);
 
@@ -75,6 +77,19 @@ controller.getUserByID = (req, res) => {
 	res.status(200).json({
 		person: data[idParsed]
 	});
+}
+
+controller.getAllUsers = (req, res) => { 
+	console.log(req.query);
+	const { page = 0, limit = 10 } = req.query;
+	const pageParsed = parseInt(page);
+	const limitParsed = parseInt(limit);
+
+	const start = pageParsed * limitParsed;
+	const end = start + limitParsed;
+
+	const slicedArray = data.slice(start, end)
+	res.status(200).json(slicedArray);
 }
 
 module.exports = controller;
