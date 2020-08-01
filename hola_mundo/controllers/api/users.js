@@ -81,6 +81,7 @@ controller.getUserByID = (req, res) => {
 
 controller.getAllUsers = (req, res) => { 
 	console.log(req.query);
+	console.log(req.headers.message);
 	const { page = 0, limit = 10 } = req.query;
 	const pageParsed = parseInt(page);
 	const limitParsed = parseInt(limit);
