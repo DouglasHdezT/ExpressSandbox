@@ -14,5 +14,6 @@ router.get("/test", (req, res, next) => {
 })
 
 router.post("/signup", users.signUp);
+router.get("/id/:id", users.getUserByID);
 
 module.exports = router;
