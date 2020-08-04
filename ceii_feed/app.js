@@ -2,7 +2,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-const database = require('./config/database');
+const database = require("./config/database");
 
 var indexRouter = require('./routes/index');
 const apiRouter = require('./routes/api');

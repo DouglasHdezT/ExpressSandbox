@@ -1,4 +1,4 @@
-const PostModel = require("../models/Post");
+const PostModel = require('../models/Post');
 
 const service = {};
 
@@ -7,32 +7,33 @@ service.verifyCreateFields = ({ title, description, image, user }) => {
 		success: true,
 		content: {
 			message: "Fields fine!"
-		},
-	};
+		}
+	}
 
 	if (!title || !user) { 
 		serviceResponse = {
 			success: false,
 			content: {
-				message: "Post not created"
-			},
-		};
+				error: "Empty fields!"
+			}
+		}
 		return serviceResponse;
 	}
 
 	/**
-	 * TODO: Agregar validación de usuario.
+	 * TODO: Verificación de tipo (ID Usuario), etc
 	 */
-	return serviceResponse;	
+
+	return serviceResponse;
 }
 
 service.create = async ({ title, description, image, user }) => { 
 	let serviceResponse = {
 		success: true,
 		content: {
-			message: "Post created"
+			message: "Post Created!"
 		}
-	};
+	}
 
 	try {
 		const post = new PostModel({
@@ -44,11 +45,11 @@ service.create = async ({ title, description, image, user }) => {
 
 		const postSaved = await post.save();
 
-		if (!postSaved) { 
+		if (!postSaved) {
 			serviceResponse = {
 				success: false,
 				content: {
-					message: "Post not created"
+					error: "Post not created!"
 				}
 			}
 		}
@@ -56,7 +57,7 @@ service.create = async ({ title, description, image, user }) => {
 		serviceResponse = {
 			success: false,
 			content: {
-				message: "Internal server error"
+				error: "Internal Server Error"
 			}
 		}
 	} finally { 
