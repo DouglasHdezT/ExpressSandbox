@@ -110,7 +110,7 @@ controller.updatePost = async (req, res) => {
 			return res.status(404).json(postExists.content);
 		}
 
-		const postUpdated = await PostService.updateOneByID(_id, fieldVerified.content);
+		const postUpdated = await PostService.updateOneByID(postExists.content, fieldVerified.content);
 		if (!postUpdated.success) { 
 			return res.status(500).json(postUpdated.content);
 		}

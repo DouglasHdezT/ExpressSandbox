@@ -33,8 +33,18 @@ service.verifyUpdateFields = ({ title, description, image}) => {
 		content: {}
 	}
 
-	if (title) serviceResponse.content.title = title;
+	if (!title && !description && !image) {
+		serviceResponse = {
+			success: false,
+			content: {
+				error: "All fields are empty"
+			}
+		}
 
+		return serviceResponse;
+	}
+
+	if (title) serviceResponse.content.title = title;
 	if (description) serviceResponse.content.description = description;
 	if (image) serviceResponse.content.image = image;
 
@@ -159,7 +169,7 @@ service.addLike = async (post) => {
 	}
 }
 
-service.updateOneByID = async (_id, contentToUpdate) => { 
+service.updateOneByID = async (post, contentToUpdate) => { 
 	let serviceResponse = {
 		success: true,
 		content: {
@@ -168,7 +178,18 @@ service.updateOneByID = async (_id, contentToUpdate) => {
 	}
 
 	try {
-		const updatedPost = await PostModel.findByIdAndUpdate(_id, contentToUpdate).exec();
+		const updatedPost = await PostModel.findByIdAndUpdate(post._id, {
+			...contentToUpdate,
+			$push: {
+				history: {
+					title: post.title,
+					description: post.description,
+					image: post.image,
+					modifiedAt: new Date()
+				}
+			}
+		});
+		
 		if (!updatedPost) { 
 			serviceResponse = {
 				success: false,
