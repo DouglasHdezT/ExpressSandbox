@@ -15,7 +15,7 @@ const connect = async () => {
 				useNewUrlParser: true,
 				useUnifiedTopology: true,
 				useCreateIndex: true,
-				useFindAndModify: false,
+				useFindAndModify: false
 			}
 		);
 		console.log(`DB Connection successful`);
