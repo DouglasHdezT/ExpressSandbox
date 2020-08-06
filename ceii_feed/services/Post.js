@@ -1,4 +1,5 @@
 const PostModel = require('../models/Post');
+const debug = require("debug")("log");
 
 const service = {};
 
@@ -200,5 +201,30 @@ service.updateOneByID = async (post, contentToUpdate) => {
 		throw new Error("Internal server error")
 	}
 }
+
+service.deleteOneByID = async (_id) => {
+	let serviceResponse = {
+		success: true,
+		content: {
+			message:"Post deleted!"
+		}
+	}
+
+	try {
+		const postDeleted = await PostModel.findByIdAndDelete(_id).exec()
+		if (!postDeleted) { 
+			serviceResponse = {
+				success: false,
+				content: {
+					error: "Post not deleted"
+				}
+			}
+		}
+		return serviceResponse;
+	} catch (error) {
+		debug(error);
+		throw new Error("Internal Server Error")
+	}
+ }
 
 module.exports = service;

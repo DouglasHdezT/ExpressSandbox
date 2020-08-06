@@ -10,5 +10,6 @@ router.get("/all", PostController.findAll);
 
 router.patch("/like", PostController.addLike);
 router.put("/", PostController.updatePost);
+router.delete("/", PostController.deleteOneByID);
 
 module.exports = router;

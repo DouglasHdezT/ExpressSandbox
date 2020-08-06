@@ -131,4 +131,28 @@ controller.updatePost = async (req, res) => {
 	}
 }
 
+controller.deleteOneByID = async (req, res) => { 
+  const { _id } = req.body;
+  if (!verifyID(_id)) { 
+    return res.status(400).json({
+      error: "Error in ID"
+    });
+  }
+  try {
+    const postExist = await PostService.findOneByID(_id);
+    if (!postExist.success) { 
+      return res.status(404).json(postExist.content);
+    }
+    const deleted = await PostService.deleteOneByID(_id);
+    if (!deleted.success) { 
+      return res.status(409).json(deleted.content)
+    }
+    res.status(200).json(deleted.content);
+  } catch (error) {
+    return res.status(500).json({
+      error: "Internal Server Error"
+    });
+   }
+}
+
 module.exports = controller;
