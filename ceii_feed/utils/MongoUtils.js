@@ -1,16 +1,12 @@
 const mongoose = require("mongoose");
-const tools = {};
+const tools = {}
 
 tools.verifyID = (_id) => { 
-	if (!_id) {
+	if (!_id) { 
 		return false;
 	}
 
-	if (!mongoose.Types.ObjectId.isValid(_id)) { 
-		return false;
-	}
-
-	return true;
+	return mongoose.Types.ObjectId.isValid(_id); 
 }
 
 module.exports = tools;

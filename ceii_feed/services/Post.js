@@ -1,4 +1,5 @@
 const PostModel = require('../models/Post');
+const debug = require("debug")("log");
 
 const service = {};
 
@@ -27,20 +28,19 @@ service.verifyCreateFields = ({ title, description, image, user }) => {
 	return serviceResponse;
 }
 
-service.verifyUpdateFields = ({ title, description, image}) => { 
+service.verifyUpdateFields = ({ title, description, image }) => {
 	let serviceResponse = {
 		success: true,
-		content: {}
+		content: {},
 	}
 
-	if (!title && !description && !image) {
+	if (!title && !description && !image) { 
 		serviceResponse = {
 			success: false,
 			content: {
 				error: "All fields are empty"
 			}
 		}
-
 		return serviceResponse;
 	}
 
@@ -107,7 +107,7 @@ service.findOneByID = async (_id) => {
 		}
 
 		return serviceResponse;
-	} catch (error) {
+	} catch (e) { 
 		throw new Error("Internal Server Error");
 	}
 }
@@ -115,9 +115,7 @@ service.findOneByID = async (_id) => {
 service.findAll = async (page, limit) => { 
 	let serviceResponse = {
 		success: true,
-		content: {
-			message: "Posts"
-		}
+		content: {}
 	}
 
 	try {
@@ -126,8 +124,7 @@ service.findAll = async (page, limit) => {
 			limit: limit,
 			sort: [{
 				updatedAt: -1
-			}],
-			
+			}]
 		}).exec();
 
 		serviceResponse.content = {
@@ -135,9 +132,10 @@ service.findAll = async (page, limit) => {
 			count: posts.length,
 			page,
 			limit
-		};
+		}
+
 		return serviceResponse;
-	} catch (error) { 
+	} catch (e) { 
 		throw new Error("Internal Server Error");
 	}
 }
@@ -158,14 +156,14 @@ service.addLike = async (post) => {
 			serviceResponse = {
 				success: false,
 				content: {
-					message: "Post not Liked!"
+					message: "Post not Liked"
 				}
 			}
 		}
 
 		return serviceResponse;
-	} catch (error) { 
-		throw new Error("")
+	} catch (e) { 
+		throw new Error("Internal Server Error");
 	}
 }
 
@@ -185,36 +183,36 @@ service.updateOneByID = async (post, contentToUpdate) => {
 					title: post.title,
 					description: post.description,
 					image: post.image,
-					modifiedAt: new Date()
+					modifiedAt: new Date(),
 				}
 			}
 		});
-		
+
 		if (!updatedPost) { 
 			serviceResponse = {
 				success: false,
-				error: "Post not updated"
+				content: {
+					error: "Post not updated!"
+				}
 			}
 		}
 
 		return serviceResponse;
-	} catch (error) { 
-		console.log(error);
-		throw new Error("Internal Server Error");
+	} catch (error) {
+		throw new Error("Internal server error")
 	}
 }
 
-service.deleteOneByID = async (_id) => { 
+service.deleteOneByID = async (_id) => {
 	let serviceResponse = {
 		success: true,
 		content: {
-			message: "Post Deleted!"
+			message:"Post deleted!"
 		}
 	}
 
 	try {
-		const postDeleted = await PostModel.findByIdAndDelete(_id).exec();
-		
+		const postDeleted = await PostModel.findByIdAndDelete(_id).exec()
 		if (!postDeleted) { 
 			serviceResponse = {
 				success: false,
@@ -223,11 +221,11 @@ service.deleteOneByID = async (_id) => {
 				}
 			}
 		}
-
 		return serviceResponse;
 	} catch (error) {
-		throw new Error("Internal Server Error"); 
+		debug(error);
+		throw new Error("Internal Server Error")
 	}
-}
+ }
 
 module.exports = service;

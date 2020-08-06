@@ -7,16 +7,16 @@ const UserSchema = new Schema({
 	username: {
 		type: String,
 		required: true,
-		unique: true,
+		unique: true
 	},
 	email: {
 		type: String,
 		required: true,
-		unique: true,
+		unique: true
 	},
 	hashedPassword: {
 		type: String,
-		default: '',
+		default: ""
 	},
 	name: {
 		type: String,
@@ -27,30 +27,29 @@ const UserSchema = new Schema({
 		type: [{
 			type: mongoose.Schema.Types.ObjectId,
 			rel: "Post"
-		}],
-		default: []
+		}]
 	},
-	savedPosts: {
+	savedPost: {
 		type: [{
 			type: mongoose.Schema.Types.ObjectId,
 			rel: "Post"
-		}],
-		default: []
-	}
+		}]
+	},
 }, {
-	timestamps: true,
+	timestamps: true
 });
 
 UserSchema
 	.virtual("password")
-	.set(function(password) { 
+	.set(function (password) { 
 		this.hashedPassword = Crypto.createHmac("sha256", password).digest("hex");
 	})
 
 UserSchema.methods = {
 	comparePassword: function (password) { 
-		return (Crypto.createHmac("sha256", password).digest("hex") === this.hashedPassword);
+		return (
+			Crypto.createHmac("sha256", password).digest("hex") === this.hashedPassword
+		);
 	}
-};
-
+}	
 module.exports = mongoose.model("User", UserSchema);
