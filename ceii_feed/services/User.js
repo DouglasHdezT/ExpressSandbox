@@ -42,6 +42,26 @@ service.verifyRegisterFields = ({ username, email, password, name, photo }) => {
     return serviceResponse;
 }
 
+service.verifyLoginFields = ({ identifier, password }) => { 
+	let serviceResponse = {
+		success: true,
+		content: {}
+	}
+
+	if (!identifier || !password) { 
+		serviceResponse = {
+			success: false,
+			content: {
+				error: "Required fields empty"
+			}
+		}
+
+		return serviceResponse;
+	}
+
+	return serviceResponse;
+}
+
 service.findOneUsernameEmail = async (username, email) => { 
     let serviceResponse = {
         success: true,

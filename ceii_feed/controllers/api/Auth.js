@@ -1,4 +1,5 @@
 const UserService = require("./../../services/User");
+const { createToken } = require('../../utils/JWTUtils');
 
 const controller = {}
 
@@ -28,5 +29,38 @@ controller.register = async (req, res) => {
         })
     }
 }
+
+controller.login = async (req, res) => { 
+	const fieldValidation = UserService.verifyLoginFields(req.body);
+	if (!fieldValidation.success) { 
+		return res.status(400).json(fieldValidation.content);
+	}
+
+	try {
+		const { identifier, password } = req.body;
+
+		const userExists = await UserService.findOneUsernameEmail(identifier, identifier);
+		if (!userExists.success) { 
+			return res.status(404).json(userExists.content);
+		}
+
+		const user = userExists.content;
+
+		if (!user.comparePassword(password)) {
+			return res.status(401).json({
+				error: "Incorrect password"
+			})
+		}
+
+		return res.status(200).json({
+			token: createToken(user._id),
+		})
+	} catch (error) {
+		return res.status(500).json({
+			error: "Internal server error"
+		})
+	}
+}
+
 
 module.exports = controller;
