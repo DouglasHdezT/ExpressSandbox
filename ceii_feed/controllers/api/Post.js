@@ -93,4 +93,42 @@ controller.addLike = async (req, res) => {
 		})
 	}
 }
+
+controller.updatePost = async (req, res) => { 
+	const { _id } = req.body;
+
+	if (!verifyID(_id)) { 
+		return res.status(400).json({
+			error: "Error in ID"
+		})
+	}
+
+	const fieldVerified = PostService.verifyUpdateFields(req.body);
+	if (!fieldVerified.success) { 
+		return res.status(400).json(fieldVerified.content);
+	}
+
+	try {
+		const postExists = await PostService.findOneByID(_id);
+		if (!postExists.success) { 
+			return res.status(404).json(postExists.content);
+		}
+
+		const postUpdated = await PostService.updateOneByID(
+			postExists.content,
+			fieldVerified.content,
+		);
+
+		if (!postUpdated.success) { 
+			return res.status(409).json(postUpdated.content); 
+		}
+
+		return res.status(200).json(postUpdated.content);
+	} catch (error) {
+		return res.status(500).json({
+			error: "Internal server error"
+		})
+	}
+}
+
 module.exports = controller;
