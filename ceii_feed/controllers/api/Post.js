@@ -13,13 +13,13 @@ controller.create = async (req, res) => {
 	try { 
 		const createPost = await PostService.create(req.body);
 		if (!createPost.success) { 
-			return res.status(500).json(createPost.content);
+			return res.status(409).json(createPost.content);
 		}
 
 		res.status(201).json(createPost.content);
 	} catch (error) {
 		return res.status(500).json({
-			error: error.message,
+			error: "Internal Server Error",
 		})
 	}
 }
@@ -41,13 +41,14 @@ controller.findOneByID = async (req, res) => {
 		return res.status(200).json(postExists.content);
 	} catch (e) { 
 		return res.status(500).json({
-			error: e.message
+			error: "Internal Server Error"
 		})
 	}
 }
 
 controller.findAll = async (req, res) => { 
 	const { page = 0, limit = 10 } = req.query; 
+	console.log(req.user);
 
 	if (!verifyTypeNumber(page, limit)) { 
 		return res.status(400).json({
@@ -59,9 +60,16 @@ controller.findAll = async (req, res) => {
 
 		const postsResponse = await PostService.findAll(parseInt(page), parseInt(limit)); 
 		res.status(200).json(postsResponse.content);
+<<<<<<< HEAD
 
 	} catch (error) { 
 		return res.status(500).json({ error: error.message });
+=======
+	} catch(e){ 
+		return res.status(500).json({
+			error: "Internal Server Error"
+		})
+>>>>>>> Sesion07
 	}
 }
 
@@ -88,7 +96,7 @@ controller.addLike = async (req, res) => {
 		return res.status(200).json(likeAdded.content);
 	} catch (e) {
 		return res.status(500).json({
-			error: e.message
+			error: "Internal Server Error"
 		})
 	}
 }
