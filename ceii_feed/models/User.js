@@ -29,7 +29,7 @@ const UserSchema = new Schema({
 			rel: "Post"
 		}]
 	},
-	savedPost: {
+	savedPosts: {
 		type: [{
 			type: mongoose.Schema.Types.ObjectId,
 			rel: "Post"
