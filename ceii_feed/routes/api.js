@@ -11,7 +11,7 @@ router.use("/auth", AuthRouter);
 
 router.use(AuthMiddleware.verifyAuth);
 
-router.use("/user", UserRouter);
 router.use("/post", PostRouter);
+router.use("/user", UserRouter);
 
 module.exports = router;

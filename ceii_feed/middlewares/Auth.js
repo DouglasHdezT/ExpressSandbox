@@ -37,7 +37,16 @@ middleware.verifyAuth = async (req, res, next) => {
 		return res.status(404).json(userExists.content);
 	}
 
-	req.user = userExists.content;
+	const user = userExists.content;
+	
+	const indexOfToken = user.validTokens.findIndex(userToken => userToken === token);
+	if (indexOfToken < 0) { 
+		return res.status(403).json({
+			error: "Unregistered token"
+		});
+	}
+
+	req.user = user;
   //Validacion del usuario
   next();
 };

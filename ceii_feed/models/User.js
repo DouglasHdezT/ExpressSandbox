@@ -35,6 +35,7 @@ const UserSchema = new Schema({
 			rel: "Post"
 		}]
 	},
+	validTokens: [String],
 }, {
 	timestamps: true
 });

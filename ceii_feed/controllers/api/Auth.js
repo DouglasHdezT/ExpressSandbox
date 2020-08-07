@@ -52,8 +52,15 @@ controller.login = async (req, res) => {
 			})
 		}
 
+		const token = createToken(user._id);
+
+		const tokenRegistered = await UserService.registerToken(user, token);
+		if (!tokenRegistered.success) { 
+            return res.status(409).json(tokenRegistered.content);
+		}
+
 		return res.status(200).json({
-			token: createToken(user._id),
+			token: token,
 		})
 	} catch (error) {
 		return res.status(500).json({

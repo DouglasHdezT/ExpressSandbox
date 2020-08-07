@@ -175,17 +175,19 @@ service.updateOneByID = async (post, contentToUpdate) => {
 	}
 
 	try {
-		const updatedPost = await PostModel.findByIdAndUpdate(post._id, {
-			...contentToUpdate,
-			$push: {
-				history: {
-					title: post.title,
-					description: post.description,
-					image: post.image,
-					modifiedAt: new Date(),
-				}
-			}
-		});
+
+		post.history.push({
+			title: post.title,
+			description: post.description,
+			image: post.image,
+			modifiedAt: new Date(),
+		}); 
+
+		Object.keys(contentToUpdate).forEach(key => { 
+			post[key] = contentToUpdate[key];
+		})
+
+		const updatedPost = await post.save();
 
 		if (!updatedPost) { 
 			serviceResponse = {
