@@ -13,13 +13,13 @@ controller.create = async (req, res) => {
 	try { 
 		const createPost = await PostService.create(req.body);
 		if (!createPost.success) { 
-			return res.status(500).json(createPost.content);
+			return res.status(409).json(createPost.content);
 		}
 
 		res.status(201).json(createPost.content);
 	} catch (error) {
 		return res.status(500).json({
-			error: error.message,
+			error: "Internal Server Error",
 		})
 	}
 }
@@ -42,7 +42,7 @@ controller.findOneByID = async (req, res) => {
 		return res.status(200).json(postExists.content);
 	} catch (e) { 
 		return res.status(500).json({
-			error: e.message
+			error: "Internal Server Error"
 		})
 	}
 }
@@ -61,7 +61,7 @@ controller.findAll = async (req, res) => {
 		res.status(200).json(postsResponse.content);
 	} catch(e){ 
 		return res.status(500).json({
-			error: e.message
+			error: "Internal Server Error"
 		})
 	}
 }
@@ -89,7 +89,7 @@ controller.addLike = async (req, res) => {
 		return res.status(200).json(likeAdded.content);
 	} catch (e) {
 		return res.status(500).json({
-			error: e.message
+			error: "Internal Server Error"
 		})
 	}
 }

@@ -80,7 +80,7 @@ service.create = async ({ title, description, image, user }) => {
 
 		return serviceResponse;
 	} catch (error) {
-		throw new Error("Internal Server Error");
+		throw error;
 	}
 }
 
@@ -106,8 +106,8 @@ service.findOneByID = async (_id) => {
 		}
 
 		return serviceResponse;
-	} catch (e) { 
-		throw new Error("Internal Server Error");
+	} catch (error) { 
+		throw error;
 	}
 }
 
@@ -134,8 +134,8 @@ service.findAll = async (page, limit) => {
 		}
 
 		return serviceResponse;
-	} catch (e) { 
-		throw new Error("Internal Server Error");
+	} catch (error) { 
+		throw error;
 	}
 }
 
@@ -161,8 +161,8 @@ service.addLike = async (post) => {
 		}
 
 		return serviceResponse;
-	} catch (e) { 
-		throw new Error("Internal Server Error");
+	} catch (error) { 
+		throw error;
 	}
 }
 
@@ -198,7 +198,7 @@ service.updateOneByID = async (post, contentToUpdate) => {
 
 		return serviceResponse;
 	} catch (error) {
-		throw new Error("Internal server error")
+		throw error;
 	}
 }
 
@@ -223,7 +223,7 @@ service.deleteOneByID = async (_id) => {
 		return serviceResponse;
 	} catch (error) {
 		debug(error);
-		throw new Error("Internal Server Error")
+		throw error;
 	}
  }
 
