@@ -41,7 +41,7 @@ const UserSchema = new Schema({
 
 UserSchema
 	.virtual("password")
-	.set(function (password) { 
+	.set(function (password) {
 		this.hashedPassword = Crypto.createHmac("sha256", password).digest("hex");
 	})
 
