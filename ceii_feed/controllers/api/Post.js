@@ -60,16 +60,10 @@ controller.findAll = async (req, res) => {
 
 		const postsResponse = await PostService.findAll(parseInt(page), parseInt(limit)); 
 		res.status(200).json(postsResponse.content);
-<<<<<<< HEAD
-
-	} catch (error) { 
-		return res.status(500).json({ error: error.message });
-=======
 	} catch(e){ 
 		return res.status(500).json({
 			error: "Internal Server Error"
 		})
->>>>>>> Sesion07
 	}
 }
 
