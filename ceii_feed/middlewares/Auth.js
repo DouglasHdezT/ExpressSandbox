@@ -1,5 +1,7 @@
 const { verifyToken } = require("./../utils/JWTUtils");
 const { verifyID } = require("./../utils/MongoUtils");
+const UserService = require("../services/User");
+
 const middleware = {};
 
 middleware.verifyAuth = async (req, res, next) => {
@@ -29,7 +31,13 @@ middleware.verifyAuth = async (req, res, next) => {
       error: "Error in ID",
     });
   }
+	
+	const userExists = await UserService.findOneByID(userID);
+	if (!userExists.success) { 
+		return res.status(404).json(userExists.content);
+	}
 
+	req.user = userExists.content;
   //Validacion del usuario
   next();
 };

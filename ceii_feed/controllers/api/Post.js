@@ -49,6 +49,7 @@ controller.findOneByID = async (req, res) => {
 
 controller.findAll = async (req, res) => { 
 	const { page = 0, limit = 10 } = req.query; 
+	console.log(req.user);
 
 	if (!verifyTypeNumber(page, limit)) { 
 		return res.status(400).json({
