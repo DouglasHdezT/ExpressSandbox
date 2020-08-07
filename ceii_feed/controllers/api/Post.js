@@ -4,9 +4,6 @@ const { verifyTypeNumber } = require('../../utils/MiscUtils');
 
 const controller = {};
 
-/**
- * TODO: 
- */
 controller.create = async (req, res) => { 
 	const fieldsValidation = PostService.verifyCreateFields(req.body);
 	if (!fieldsValidation.success) { 
@@ -22,7 +19,7 @@ controller.create = async (req, res) => {
 		res.status(201).json(createPost.content);
 	} catch (error) {
 		return res.status(500).json({
-			error: "Internal Server Error",
+			error: error.message,
 		})
 	}
 }
@@ -44,13 +41,13 @@ controller.findOneByID = async (req, res) => {
 		return res.status(200).json(postExists.content);
 	} catch (e) { 
 		return res.status(500).json({
-			error: "Internal Server Error"
+			error: e.message
 		})
 	}
 }
 
 controller.findAll = async (req, res) => { 
-	const { page = 0, limit = 10 } = req.query;
+	const { page = 0, limit = 10 } = req.query; 
 
 	if (!verifyTypeNumber(page, limit)) { 
 		return res.status(400).json({
@@ -91,7 +88,7 @@ controller.addLike = async (req, res) => {
 		return res.status(200).json(likeAdded.content);
 	} catch (e) {
 		return res.status(500).json({
-			error: "Internal server Error"
+			error: e.message
 		})
 	}
 }

@@ -9,7 +9,7 @@ tools.createToken = (_id) => {
 	};
 
 	return jwt.sign(payload, secret, {
-		expiresIn: "15D",
+		expiresIn: "1m",
 	})
 }
 

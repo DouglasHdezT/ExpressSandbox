@@ -80,7 +80,7 @@ service.create = async ({ title, description, image, user }) => {
 
 		return serviceResponse;
 	} catch (error) {
-		throw error;
+		throw new Error("Internal Server Error");
 	}
 }
 
@@ -107,8 +107,8 @@ service.findOneByID = async (_id) => {
 		}
 
 		return serviceResponse;
-	} catch (error) { 
-		throw error;
+	} catch (e) { 
+		throw new Error("Internal Server Error");
 	}
 }
 
@@ -135,8 +135,8 @@ service.findAll = async (page, limit) => {
 		}
 
 		return serviceResponse;
-	} catch (error) { 
-		throw error;
+	} catch (e) { 
+		throw new Error("Internal Server Error");
 	}
 }
 
@@ -162,8 +162,8 @@ service.addLike = async (post) => {
 		}
 
 		return serviceResponse;
-	} catch (error) { 
-		throw error;
+	} catch (e) { 
+		throw new Error("Internal Server Error");
 	}
 }
 
@@ -176,18 +176,17 @@ service.updateOneByID = async (post, contentToUpdate) => {
 	}
 
 	try {
-		post.history.push({
-			title: post.title,
-			description: post.description,
-			image: post.image,
-			modifiedAt: new Date(),
-		})
-
-		Object.keys(contentToUpdate).forEach(key => {
-			post[key] = contentToUpdate[key];
-		}); 
-
-		const updatedPost = await post.save();
+		const updatedPost = await PostModel.findByIdAndUpdate(post._id, {
+			...contentToUpdate,
+			$push: {
+				history: {
+					title: post.title,
+					description: post.description,
+					image: post.image,
+					modifiedAt: new Date(),
+				}
+			}
+		});
 
 		if (!updatedPost) { 
 			serviceResponse = {
@@ -200,7 +199,7 @@ service.updateOneByID = async (post, contentToUpdate) => {
 
 		return serviceResponse;
 	} catch (error) {
-		throw error;
+		throw new Error("Internal server error")
 	}
 }
 
@@ -224,7 +223,8 @@ service.deleteOneByID = async (_id) => {
 		}
 		return serviceResponse;
 	} catch (error) {
-		throw error;
+		debug(error);
+		throw new Error("Internal Server Error")
 	}
  }
 
