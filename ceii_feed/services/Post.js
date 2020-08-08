@@ -122,7 +122,7 @@ service.findAll = async (page, limit) => {
 			skip: page * limit,
 			limit: limit,
 			sort: [{
-				updatedAt: -1
+				createdAt: -1
 			}]
 		}).exec();
 

@@ -22,7 +22,8 @@ const PostSchema = new Schema({
 		default:[]
 	},
 	user: {
-		type: String,
+		type: mongosee.Schema.Types.ObjectId,
+		ref: "User",
 		required: true,
 	}
 }, {
