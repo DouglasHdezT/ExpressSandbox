@@ -1,4 +1,6 @@
 const PostService = require("../../services/Post");
+const UserService = require("../../services/User");
+
 const { verifyID } = require('../../utils/MongoUtils');
 const { verifyTypeNumber } = require('../../utils/MiscUtils');
 
@@ -44,6 +46,31 @@ controller.findOneByID = async (req, res) => {
 	} catch (e) { 
 		return res.status(500).json({
 			error: "Internal Server Error"
+		})
+	}
+}
+
+controller.findAllByUser = async (req, res) => { 
+	const { id = req.user._id } = req.query;
+
+	if (!verifyID(id)) { 
+		return res.status(400).json({
+			error: "Error in ID"
+		});
+	}
+
+	try {
+		const userExists = await UserService.findOneByID(id);
+		if (!userExists.success) { 
+			return res.status(404).json(userExists.content);
+		}
+
+		const postsByUser = await PostService.findAllByUserID(id);
+		return res.status(200).json(postsByUser.content);
+		
+	} catch (error) {
+		return res.status(500).json({
+			error: "Internal server error"
 		})
 	}
 }

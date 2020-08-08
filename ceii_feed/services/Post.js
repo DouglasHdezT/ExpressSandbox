@@ -58,7 +58,7 @@ service.verifyUserAuthority = (post, user) => {
 		serviceResponse = {
 			success: false,
 			content: {
-				error:"This post dont belong to you"
+				error:"This post doesnt belong to you"
 			}
 		}
 	}
@@ -123,6 +123,24 @@ service.findOneByID = async (_id) => {
 
 		return serviceResponse;
 	} catch (error) { 
+		throw error;
+	}
+}
+
+service.findAllByUserID = async (userID) => { 
+	let serviceResponse = {
+		success: true,
+		content: {}
+	}
+
+	try {
+		const posts = await PostModel.find({ user: userID })
+			.populate("user", "username _id")
+			.exec();
+		
+		serviceResponse.content = posts;
+		return serviceResponse;
+	} catch (error) {
 		throw error;
 	}
 }
