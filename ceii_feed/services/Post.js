@@ -107,14 +107,9 @@ service.findOneByID = async (_id) => {
 	}
 
 	try {
-<<<<<<< HEAD
-		const post = await PostModel.findById(_id).exec();
-		
-=======
 		const post = await PostModel.findById(_id)
 			.populate("user", "username photo _id")
 			.exec();
->>>>>>> Sesion07
 		if (!post) {
 			serviceResponse = {
 				success: false,
