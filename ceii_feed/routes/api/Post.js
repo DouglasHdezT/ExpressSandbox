@@ -7,7 +7,6 @@ router.post("/", PostController.create);
 
 router.get("/id/:_id", PostController.findOneByID);
 router.get("/all", PostController.findAll);
-router.get("/user", PostController.findByUser);
 
 router.patch("/like", PostController.addLike);
 router.put("/", PostController.updatePost);
