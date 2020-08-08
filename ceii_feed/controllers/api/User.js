@@ -1,6 +1,8 @@
 const UserService = require("./../../services/User");
 const PostService = require("./../../services/Post");
+
 const { verifyID } = require("./../../utils/MongoUtils");
+
 const controller = {}
 
 controller.getUser = (req, res) => { 
@@ -69,6 +71,39 @@ controller.savePost = async (req, res) => {
 		})
 	}
 
+}
+
+controller.getProfile = async (req, res) => { 
+	const { _id } = req.params;
+
+	if (!verifyID(_id)) { 
+		return res.status(400).json({
+			error: "Error in ID"
+		});
+	}
+
+	try {
+		const userExists = await UserService.findOneByID(_id);
+		if (!userExists.success) { 
+			return res.status(404).json(userExists.content);
+		}
+
+		const user = userExists.content;
+		const posts = await PostService.findAllByUserID(user._id);
+
+		return res.status(200).json({
+			...user._doc,
+			savedPosts: undefined,
+			validTokens: undefined,
+			createdAt: undefined,
+			updatedAt: undefined,
+			posts: posts.content,
+		});
+	} catch (error) {
+		return res.status(500).json({
+			error:"Internal Server Error"
+		})
+	}
 }
 
 module.exports = controller;
