@@ -23,16 +23,10 @@ const UserSchema = new Schema({
 		required: true,
 	},
 	photo: String,
-	posts: {
-		type: [{
-			type: mongoose.Schema.Types.ObjectId,
-			rel: "Post"
-		}]
-	},
 	savedPosts: {
 		type: [{
 			type: mongoose.Schema.Types.ObjectId,
-			rel: "Post"
+			ref: "Post"
 		}]
 	},
 	validTokens: [String],

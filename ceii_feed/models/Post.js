@@ -1,5 +1,5 @@
-const mongosee = require("mongoose");
-const Schema = mongosee.Schema;
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
 const PostSchema = new Schema({
 	title: {
@@ -22,11 +22,12 @@ const PostSchema = new Schema({
 		default:[]
 	},
 	user: {
-		type: String,
+		type: mongoose.Schema.Types.ObjectId,
+		ref: "User",
 		required: true,
 	}
 }, {
 	timestamps: true,
 });
 
-module.exports = mongosee.model("Post", PostSchema);
+module.exports = mongoose.model("Post", PostSchema);
