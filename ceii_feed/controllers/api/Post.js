@@ -11,7 +11,8 @@ controller.create = async (req, res) => {
 	}
 
 	try { 
-		const createPost = await PostService.create(req.body);
+		const { user } = req;
+		const createPost = await PostService.create(req.body, user._id);
 		if (!createPost.success) { 
 			return res.status(409).json(createPost.content);
 		}

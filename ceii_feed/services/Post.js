@@ -3,7 +3,7 @@ const debug = require("debug")("log");
 
 const service = {};
 
-service.verifyCreateFields = ({ title, description, image, user }) => { 
+service.verifyCreateFields = ({ title, description, image }) => { 
 	let serviceResponse = {
 		success: true,
 		content: {
@@ -11,19 +11,15 @@ service.verifyCreateFields = ({ title, description, image, user }) => {
 		}
 	}
 
-	if (!title || !user) { 
+	if (!title) { 
 		serviceResponse = {
 			success: false,
 			content: {
-				error: "Empty fields!"
+				error: "Title is required!"
 			}
 		}
 		return serviceResponse;
 	}
-
-	/**
-	 * TODO: Verificación de tipo (ID Usuario), etc
-	 */
 
 	return serviceResponse;
 }
@@ -51,7 +47,7 @@ service.verifyUpdateFields = ({ title, description, image }) => {
 	return serviceResponse;
 }
 
-service.create = async ({ title, description, image, user }) => { 
+service.create = async ({ title, description, image }, userID) => { 
 	let serviceResponse = {
 		success: true,
 		content: {
@@ -64,7 +60,7 @@ service.create = async ({ title, description, image, user }) => {
 			title,
 			description,
 			image,
-			user
+			user: userID
 		});
 
 		const postSaved = await post.save();
