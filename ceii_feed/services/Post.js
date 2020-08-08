@@ -89,7 +89,9 @@ service.findOneByID = async (_id) => {
 	}
 
 	try {
-		const post = await PostModel.findById(_id).exec();
+		const post = await PostModel.findById(_id)
+			.populate("user", "username _id")
+			.exec();
 		if (!post) {
 			serviceResponse = {
 				success: false,
@@ -120,7 +122,7 @@ service.findAll = async (page, limit) => {
 			sort: [{
 				createdAt: -1
 			}]
-		}).exec();
+		}).populate("user", "username _id").exec();
 
 		serviceResponse.content = {
 			posts,
