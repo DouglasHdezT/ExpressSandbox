@@ -47,6 +47,24 @@ service.verifyUpdateFields = ({ title, description, image }) => {
 	return serviceResponse;
 }
 
+service.verifyUserAuthority = (post, user) => { 
+	let serviceResponse = {
+		success: true,
+		content: {
+			message:"User authority verified"
+		}
+	}
+	if (!post.user._id.equals(user._id)) { 
+		serviceResponse = {
+			success: false,
+			content: {
+				error:"This post dont belong to you"
+			}
+		}
+	}
+	return serviceResponse;
+}
+
 service.create = async ({ title, description, image }, userID) => { 
 	let serviceResponse = {
 		success: true,

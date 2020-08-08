@@ -116,6 +116,12 @@ controller.updatePost = async (req, res) => {
 			return res.status(404).json(postExists.content);
 		}
 
+		const { user } = req;
+		const userAuthority = PostService.verifyUserAuthority(postExists.content, user);
+		if (!userAuthority.success) { 
+			return res.status(401).json(userAuthority.content)
+		}
+
 		const postUpdated = await PostService.updateOneByID(
 			postExists.content,
 			fieldVerified.content,
@@ -144,7 +150,14 @@ controller.deleteOneByID = async (req, res) => {
     const postExist = await PostService.findOneByID(_id);
     if (!postExist.success) { 
       return res.status(404).json(postExist.content);
-    }
+		}
+
+		const { user } = req;
+		const userAuthority = PostService.verifyUserAuthority(postExist.content, user);
+		if (!userAuthority.success) { 
+			return res.status(401).json(userAuthority.content)
+		}
+
     const deleted = await PostService.deleteOneByID(_id);
     if (!deleted.success) { 
       return res.status(409).json(deleted.content)
