@@ -1,4 +1,6 @@
 const PostService = require("../../services/Post");
+const UserService = require("../../services/User");
+
 const { verifyID } = require('../../utils/MongoUtils');
 const { verifyTypeNumber } = require('../../utils/MiscUtils');
 
@@ -11,7 +13,8 @@ controller.create = async (req, res) => {
 	}
 
 	try { 
-		const createPost = await PostService.create(req.body);
+		const { user } = req;
+		const createPost = await PostService.create(req.body, user._id);
 		if (!createPost.success) { 
 			return res.status(409).json(createPost.content);
 		}
@@ -42,6 +45,31 @@ controller.findOneByID = async (req, res) => {
 	} catch (e) { 
 		return res.status(500).json({
 			error: "Internal Server Error"
+		})
+	}
+}
+
+controller.findAllByUser = async (req, res) => { 
+	const { id = req.user._id } = req.query;
+
+	if (!verifyID(id)) { 
+		return res.status(400).json({
+			error: "Error in ID"
+		});
+	}
+
+	try {
+		const userExists = await UserService.findOneByID(id);
+		if (!userExists.success) { 
+			return res.status(404).json(userExists.content);
+		}
+
+		const postsByUser = await PostService.findAllByUserID(id);
+		return res.status(200).json(postsByUser.content);
+		
+	} catch (error) {
+		return res.status(500).json({
+			error: "Internal server error"
 		})
 	}
 }
@@ -115,6 +143,12 @@ controller.updatePost = async (req, res) => {
 			return res.status(404).json(postExists.content);
 		}
 
+		const { user } = req;
+		const userAuthority = PostService.verifyUserAuthority(postExists.content, user);
+		if (!userAuthority.success) { 
+			return res.status(401).json(userAuthority.content)
+		}
+
 		const postUpdated = await PostService.updateOneByID(
 			postExists.content,
 			fieldVerified.content,
@@ -143,7 +177,14 @@ controller.deleteOneByID = async (req, res) => {
     const postExist = await PostService.findOneByID(_id);
     if (!postExist.success) { 
       return res.status(404).json(postExist.content);
-    }
+		}
+
+		const { user } = req;
+		const userAuthority = PostService.verifyUserAuthority(postExist.content, user);
+		if (!userAuthority.success) { 
+			return res.status(401).json(userAuthority.content)
+		}
+
     const deleted = await PostService.deleteOneByID(_id);
     if (!deleted.success) { 
       return res.status(409).json(deleted.content)

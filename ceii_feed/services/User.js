@@ -255,4 +255,38 @@ service.registerToken = async (user, token) => {
 	}
 }
 
+service.registerSavedPost = async (user, postID) => { 
+	let serviceResponse = {
+		success: true,
+		content: {
+			message:"Post registered"
+		}
+	}
+	try {
+		const alreadyExists = user.savedPosts.some(post => post.equals(postID));
+		if (alreadyExists) { 
+			serviceResponse = {
+				success: true,
+				content: {
+					message: "Post already in list"
+				}
+			}
+			return serviceResponse;
+		}
+		user.savedPosts.push(postID);
+		const userUpdated = await user.save();
+		if (!userUpdated) { 
+			serviceResponse = {
+				success: false,
+				content: {
+					error:"Cannot register post"
+				}
+			}
+		}
+		return serviceResponse;
+	} catch (error) { 
+		throw error;
+	}
+}
+
 module.exports = service;
