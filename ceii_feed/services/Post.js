@@ -108,7 +108,7 @@ service.findOneByID = async (_id) => {
 
 	try {
 		const post = await PostModel.findById(_id)
-			.populate("user", "username _id")
+			.populate("user", "username photo _id")
 			.exec();
 		if (!post) {
 			serviceResponse = {
@@ -135,7 +135,7 @@ service.findAllByUserID = async (userID) => {
 
 	try {
 		const posts = await PostModel.find({ user: userID })
-			.populate("user", "username _id")
+			.populate("user", "username photo _id")
 			.exec();
 		
 		serviceResponse.content = posts;
@@ -158,7 +158,7 @@ service.findAll = async (page, limit) => {
 			sort: [{
 				createdAt: -1
 			}]
-		}).populate("user", "username _id").exec();
+		}).populate("user", "username photo _id").exec();
 
 		serviceResponse.content = {
 			posts,
